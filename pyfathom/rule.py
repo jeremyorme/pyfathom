@@ -1,6 +1,6 @@
 import re
-from matchers import *
-from classification import *
+from .matchers import *
+from .classification import *
 
 # defines a rule for matching text in the input string
 class rule:

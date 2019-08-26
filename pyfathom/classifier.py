@@ -1,6 +1,6 @@
-from rule import *
-from tokenisers import *
-from classifications import *
+from .rule import *
+from .tokenisers import *
+from .classifications import *
 
 class classifier:
 	

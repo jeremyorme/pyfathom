@@ -1,5 +1,5 @@
-from matchers import *
-from classification import *
+from .matchers import *
+from .classification import *
 
 class classifications:
 	def __init__(self, token_list, classification_list):
