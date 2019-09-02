@@ -65,8 +65,17 @@ class rule:
 			
 			# for each matcher
 			j = 0
+			d = 0
+			can_defer = True
 			while j < len(self.matchers):
-				matcher = self.matchers[j]
+				matcher = self.matchers[j + d]
+				
+				if can_defer:
+					# if lazy, try to defer right
+					while j + d < len(self.matchers) - 1 and matcher.quantifier in ['*?', '+?']:
+						d += 1
+						can_defer = False
+						matcher = self.matchers[j + d]
 				
 				# calculate token index, t
 				t = i + n + k
@@ -109,6 +118,7 @@ class rule:
 						
 						# next matcher
 						j += 1
+						can_defer = True
 						
 						# increment match count for rule
 						n += 1
@@ -142,23 +152,31 @@ class rule:
 					
 				else:
 					
-					# if first match attempt and need match
-					if k == 0 and matcher.quantifier in ['+', '/']:
+					if d > 0 and matcher.quantifier in ['+?', '*?']:
 						
-						# reset matched types and break
-						new_types = []
-						break
+						# try previous matcher
+						d -= 1
 						
 					else:
 						
-						# next matcher
-						j += 1
+						# if first match attempt and need match
+						if k == 0 and matcher.quantifier in ['+', '+?', '/']:
 						
-						# add matcher match count to rule match count
-						n += k
+							# reset matched types and break
+							new_types = []
+							break
 						
-						# reset matcher match count
-						k = 0
+						else:
+						
+							# next matcher
+							j += 1
+							can_defer = True
+						
+							# add matcher match count to rule match count
+							n += k
+						
+							# reset matcher match count
+							k = 0
 						
 			# if rule matched
 			if len(new_types) > 0:
