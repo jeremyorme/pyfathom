@@ -124,6 +124,15 @@ class rule:
 						# add matcher match count to rule match count
 						n += k
 						
+						# skip matchers accepting zero matches
+						while j < len(self.matchers):
+							if self.matchers[j].quantifier in ['/', '+', '+?']:
+								break
+								
+						# if matchers left then ditch match
+						if j < len(self.matchers):
+							new_types = []
+						
 						break
 					
 				else:

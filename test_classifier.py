@@ -22,4 +22,9 @@ def test_no_match():
 	#print(c.classify('zyx').classification_list)
 	assert str(c.classify('zyx')) == 'zyx'
 
+def test_dual_pattern_end_missing():
+	c = classifier('/xyz/,/xyz/ is abc')
+	print(c.classify('xyz').classification_list)
+	assert str(c.classify('xyz')) == 'xyz'
+
 pytest.main()
