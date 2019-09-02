@@ -34,8 +34,8 @@ class classifications:
 					str += '<' + classification.type + '>'
 					types.append(classification.type)
 					
-			# if no new opening tags, separate with space
-			if len(types) == before_close_len and len(types) == before_open_len:
+			# if not start and no new opening tags, separate with space
+			if len(str) > 0 and len(types) == before_close_len and len(types) == before_open_len:
 				str += ' '
 			
 			# write the token content
