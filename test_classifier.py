@@ -59,4 +59,12 @@ def test_type_and_pattern_mix():
 	c = classifier(k)
 	assert str(c.classify('abc xyz cba')) == '<one>abc</one><foo><two>xyz</two></foo><three>cba</three>'
 	
+def test_zero_many_pattern_match_many():
+	c = classifier('/these/,/\\w+/* is words')
+	assert str(c.classify('these are some words')) == '<words>these are some words</words>'
+	
+def test_zero_many_pattern_match_zero():
+	c = classifier('/these/,/\\w+/* is words')
+	assert str(c.classify('these')) == '<words>these</words>'
+	
 pytest.main()

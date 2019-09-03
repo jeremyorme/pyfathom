@@ -132,6 +132,7 @@ class rule:
 						while j < len(self.matchers):
 							if self.matchers[j].quantifier in ['/', '+', '+?']:
 								break
+							j += 1
 								
 						# if matchers left then ditch match
 						if j < len(self.matchers):
