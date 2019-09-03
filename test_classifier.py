@@ -67,4 +67,28 @@ def test_zero_many_pattern_match_zero():
 	c = classifier('/these/,/\\w+/* is words')
 	assert str(c.classify('these')) == '<words>these</words>'
 	
+def test_one_many_pattern_match_many():
+	c = classifier('/these/,/\\w+/+ is words')
+	assert str(c.classify('these are some words')) == '<words>these are some words</words>'
+	
+def test_one_many_pattern_match_one():
+	c = classifier('/these/,/\\w+/+ is words')
+	assert str(c.classify('these are')) == '<words>these are</words>'
+	
+def test_one_many_pattern_match_zero():
+	c = classifier('/these/,/\\w+/+ is words')
+	assert str(c.classify('these')) == 'these'
+	
+def test_zero_one_pattern_match_many():
+	c = classifier('/these/,/\\w+/? is words')
+	assert str(c.classify('these are some words')) == '<words>these are</words>some words'
+	
+def test_zero_one_pattern_match_one():
+	c = classifier('/these/,/\\w+/? is words')
+	assert str(c.classify('these are')) == '<words>these are</words>'
+	
+def test_zero_one_pattern_match_zero():
+	c = classifier('/these/,/\\w+/? is words')
+	assert str(c.classify('these')) == '<words>these</words>'
+	
 pytest.main()
