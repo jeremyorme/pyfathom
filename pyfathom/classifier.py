@@ -7,8 +7,9 @@ class classifier:
 	def __init__(self, knowledge, tokeniser=default_tokeniser()):
 		self.rules = []
 		for line in knowledge.splitlines():
-			if len(line) > 0:
-				self.rules.append(rule(line))
+			l = line.strip()
+			if len(l) > 0:
+				self.rules.append(rule(l))
 		self.tokeniser = tokeniser
 		
 	def classify(self, in_str):

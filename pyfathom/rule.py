@@ -121,8 +121,12 @@ class rule:
 					# if end then break
 					if i + n + k == len(tokens):
 						
-						# add matcher match count to rule match count
-						n += k
+						if k > 0:
+							# add matcher match count to rule match count
+							n += k
+							
+							# next matcher
+							j += 1
 						
 						# skip matchers accepting zero matches
 						while j < len(self.matchers):

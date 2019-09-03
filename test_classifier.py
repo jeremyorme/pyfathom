@@ -19,12 +19,18 @@ def test_dual_pattern_no_overlap():
 	
 def test_no_match():
 	c = classifier('/xyz/ is abc')
-	#print(c.classify('zyx').classification_list)
 	assert str(c.classify('zyx')) == 'zyx'
 
 def test_dual_pattern_end_missing():
 	c = classifier('/xyz/,/xyz/ is abc')
-	print(c.classify('xyz').classification_list)
 	assert str(c.classify('xyz')) == 'xyz'
+	
+def test_single_type_match():
+	k = '''
+		/xyz/ is abc
+		abc is def
+	'''
+	c = classifier(k)
+	assert str(c.classify('xyz')) == '<abc><def>xyz</def></abc>'
 
 pytest.main()
