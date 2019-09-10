@@ -65,14 +65,38 @@ class rule:
 			
 			# for each matcher
 			j = 0
+			d = 0
 			while j < len(self.matchers):
-				matcher = self.matchers[j]
+				
+				if d == 0:
+					
+					# if lazy, try subsequent matcher
+					if self.matchers[j + d].quantifier == '+?' and k > 0:
+						d += 1
+					else:
+						while j + d < len(self.matchers) - 1 and (self.matchers[j + d].quantifier == '*?'):
+							d += 1
+						
+				else:
+					d -= 1
+					
+				matcher = self.matchers[j + d]
 				
 				# calculate token index, t
 				t = i + n + k
 				
 				# match token using current matcher
 				if matcher.match(tokens[t], t, types):
+					
+					if d > 0:
+						
+						# move to matcher that matched token
+						j += d
+						d = 0
+						
+						# matcher match count now belongs in rule match count as current matcher changed
+						n += k
+						k = 0
 					
 					# if is-type is given
 					if len(matcher.is_type) > 0:
@@ -94,7 +118,7 @@ class rule:
 						else:
 							
 							# if first match for rule
-							if j == 0 and k == 0:
+							if len(new_types) == 0:
 								
 								# create classification
 								new_types.append(classification(t, t, self.is_type))
@@ -141,24 +165,26 @@ class rule:
 						break
 					
 				else:
-					
-					# if first match attempt and need match
-					if k == 0 and matcher.quantifier in ['+', '/']:
 						
-						# reset matched types and break
-						new_types = []
-						break
+					if d == 0:
 						
-					else:
+						# if first match attempt and need match
+						if k == 0 and matcher.quantifier in ['+', '+?', '/']:
 						
-						# next matcher
-						j += 1
+							# reset matched types and break
+							new_types = []
+							break
 						
-						# add matcher match count to rule match count
-						n += k
+						else:
 						
-						# reset matcher match count
-						k = 0
+							# next matcher
+							j += 1
+						
+							# add matcher match count to rule match count
+							n += k
+						
+							# reset matcher match count
+							k = 0
 						
 			# if rule matched
 			if len(new_types) > 0:

@@ -8,12 +8,17 @@ class matcher:
 # matches single token with a regex pattern
 class pattern_matcher(matcher):
 	
-	fmt = '\\/(?:\\\\\\\\|\\\\\\/|[^\\/])+\\/[\+\*\?]?'
+	_fmt_pat = '(?:\\\\\\\\|\\\\\\/|[^\\/])+'
+	_fmt_qtf = '(?:\\+\\??|\\*\\??|\\?)?'
+	_fmt_caps = '\\/(' + _fmt_pat + ')\\/(' + _fmt_qtf + ')'
+	
+	fmt = '\\/' + _fmt_pat + '\\/' + _fmt_qtf
 	
 	def __init__(self, pattern, is_type):
 		super(pattern_matcher, self).__init__(is_type)
-		self.pattern = '^(?:' + (pattern[1:-1] if pattern[-1] == '/' else pattern[1:-2]) + ')$'
-		self.quantifier = pattern[-1]
+		m = re.match(pattern_matcher._fmt_caps, pattern)
+		self.pattern = '^(?:' + m.group(1) + ')$'
+		self.quantifier = m.group(2) or '/'
 	
 	def match(self, token, idx, types):
 		return re.match(self.pattern, token) is not None

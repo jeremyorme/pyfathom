@@ -91,4 +91,40 @@ def test_zero_one_pattern_match_zero():
 	c = classifier('/these/,/\\w+/? is words')
 	assert str(c.classify('these')) == '<words>these</words>'
 	
+def test_lazy_zero_many_pattern_match_many():
+	c = classifier('/\w+/*?,/abc/ is foo')
+	assert str(c.classify('xyz xyz abc xyz')) == '<foo>xyz xyz abc</foo>xyz'
+	
+def test_lazy_zero_many_pattern_match_zero():
+	c = classifier('/\w+/*?,/abc/ is foo')
+	assert str(c.classify('abc xyz')) == '<foo>abc</foo>xyz'
+	
+def test_lazy_one_many_pattern_match_many():
+	c = classifier('/\w+/+?,/abc/ is foo')
+	assert str(c.classify('xyz xyz abc xyz')) == '<foo>xyz xyz abc</foo>xyz'
+	
+def test_lazy_one_many_pattern_match_zero():
+	c = classifier('/\w+/+?,/abc/ is foo')
+	assert str(c.classify('abc xyz')) == 'abc xyz'
+	
+def test_lazy_zero_many_dual_pattern_match_zero_many():
+	c = classifier('/xyz/*?,/pqr/*?,/abc/ is foo')
+	assert str(c.classify('pqr pqr abc xyz')) == '<foo>pqr pqr abc</foo>xyz'
+	
+def test_lazy_zero_many_dual_pattern_match_many_many():
+	c = classifier('/xyz/*?,/pqr/*?,/abc/ is foo')
+	assert str(c.classify('xyz xyz pqr pqr abc xyz')) == '<foo>xyz xyz pqr pqr abc</foo>xyz'
+
+def test_lazy_zero_many_dual_pattern_match_many_zero():
+	c = classifier('/xyz/*?,/pqr/*?,/abc/ is foo')
+	assert str(c.classify('xyz xyz abc xyz')) == '<foo>xyz xyz abc</foo>xyz'
+
+def test_lazy_zero_many_dual_pattern_match_zero_zero():
+	c = classifier('/xyz/*?,/pqr/*?,/abc/ is foo')
+	assert str(c.classify('abc xyz')) == '<foo>abc</foo>xyz'
+	
+def test_lazy_zero_many_dual_pattern_match_zero_many_not_start():
+	c = classifier('/xyz/*?,/pqr/*?,/abc/ is foo')
+	assert str(c.classify('zzz pqr pqr abc xyz')) == 'zzz<foo>pqr pqr abc</foo>xyz'
+		
 pytest.main()
