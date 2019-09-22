@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyfathom",
-    version="0.0.1",
+    version="0.0.2",
     author="Jeremy Orme",
     author_email="me@jeremyorme.com",
     description="Text comprehension library for Python",

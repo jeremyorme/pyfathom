@@ -1,6 +1,9 @@
 # pyfathom
 Text comprehension library for python
 
+## Blog
+Follow the development of this project at http://jeremyorme.com
+
 ## Example
 Given a collection of input strings with varying syntax:
 
@@ -90,3 +93,10 @@ black beans
 Garam Masala
 chopped cilantro
 ```
+
+## Release notes
+
+### 0.0.2
+
+* Lazy matcher
+* Bug fixes
